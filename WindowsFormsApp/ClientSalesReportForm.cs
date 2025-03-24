@@ -40,11 +40,31 @@ namespace WindowsFormsApp
 
         private void GenerateReportButton_Click(object sender, EventArgs e)
         {
-            var clientId = (int)clientComboBox.EditValue;
+            if (clientComboBox.EditValue == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите клиента.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             var startDate = startDatePicker.DateTime;
             var endDate = endDatePicker.DateTime;
 
+            if (startDate == null || endDate == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите период для отчета.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (startDate > endDate)
+            {
+                MessageBox.Show("Дата начала не может быть позже даты окончания.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var clientId = (int)clientComboBox.EditValue;
             var reportData = _salesDataService.GetClientSalesReport(clientId, startDate, endDate);
+
+            // Отображаем отчет
             DisplayReport(reportData);
         }
 

@@ -26,8 +26,22 @@ namespace WindowsFormsApp
 
         private void FilterButton_Click(object sender, EventArgs e)
         {
+
+            if (startDatePicker.EditValue == null || endDatePicker.EditValue == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите период для фильтрации.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             DateTime startDate = (DateTime)startDatePicker.EditValue;
             DateTime endDate = (DateTime)endDatePicker.EditValue;
+
+            if (startDate > endDate)
+            {
+                MessageBox.Show("Дата начала не может быть позже даты окончания.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             endDate = endDate.Date.AddDays(1).AddTicks(-1);
 
             FilterSalesByDate(startDate, endDate);
